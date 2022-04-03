@@ -8,9 +8,14 @@ namespace MusicBeePlugin
     public partial class FrmLyrics : Form
     {
         private SettingsObj _settings;
-        public FrmLyrics(SettingsObj settings)
+        private string _lyrics1Path;
+        private string _lyrics2Path;
+
+        public FrmLyrics(SettingsObj settings, string lyrics1Path, string lyrics2Path)
         {
             _settings = settings;
+            _lyrics1Path = lyrics1Path;
+            _lyrics2Path = lyrics2Path;
             
             InitializeComponent();
         }
@@ -84,6 +89,8 @@ namespace MusicBeePlugin
         {
             _line1 = line1;
             _line2 = line2;
+            File.WriteAllText(_lyrics1Path, line1);
+            File.WriteAllText(_lyrics2Path, line2);
             Redraw();
         }
 

@@ -17,12 +17,16 @@ namespace MusicBeePlugin
     {
         private const long UpdateIntervalMs = 100L;
         private const string SettingsFileName = "desktopLyrics.json";
+        private const string Lyrics1FileName = "Lyrics1.txt";
+        private const string Lyrics2FileName = "Lyrics2.txt";
         private const string SettingsFileName2 = "desktopLyrics_Window.set";
 
         // MB related
         private MusicBeeApiInterface _mbApiInterface;
         private readonly PluginInfo _about = new PluginInfo();
         private string SettingsPath => Path.Combine(_mbApiInterface.Setting_GetPersistentStoragePath(), SettingsFileName);
+        private string Lyrics1Path => Path.Combine(_mbApiInterface.Setting_GetPersistentStoragePath(), Lyrics1FileName);
+        private string Lyrics2Path => Path.Combine(_mbApiInterface.Setting_GetPersistentStoragePath(), Lyrics2FileName);
         public string SettingsPath2 => Path.Combine(_mbApiInterface.Setting_GetPersistentStoragePath(), SettingsFileName2);
         // Customed
         private volatile SettingsObj _settings;
@@ -105,6 +109,8 @@ namespace MusicBeePlugin
         {
             if (File.Exists(SettingsPath)) File.Delete(SettingsPath);
             if (File.Exists(SettingsPath2)) File.Delete(SettingsPath2); 
+            if (File.Exists(Lyrics1Path)) File.Delete(SettingsPath2); 
+            if (File.Exists(Lyrics2Path)) File.Delete(SettingsPath2); 
         }
 
         public void ReceiveNotification(string sourceFileUrl, NotificationType type)
@@ -196,7 +202,7 @@ namespace MusicBeePlugin
             var f = (Form)Control.FromHandle(_mbApiInterface.MB_GetWindowHandle());
             f.Invoke(new Action(() =>
             {
-                _frmLyrics = new FrmLyrics(_settings);
+                _frmLyrics = new FrmLyrics(_settings, Lyrics1Path, Lyrics2Path);
                 _frmLyrics.Show();
             }));
         }
